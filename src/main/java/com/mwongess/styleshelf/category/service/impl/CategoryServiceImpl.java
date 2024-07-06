@@ -1,6 +1,7 @@
 package com.mwongess.styleshelf.category.service.impl;
 
 import com.mwongess.styleshelf.category.dto.CategoryDto;
+import com.mwongess.styleshelf.category.exception.ResourceNotFoundException;
 import com.mwongess.styleshelf.category.mapper.CategoryMapper;
 import com.mwongess.styleshelf.category.model.Category;
 import com.mwongess.styleshelf.category.repository.CategoryRepository;
@@ -18,5 +19,13 @@ public class CategoryServiceImpl implements CategoryService {
         Category category = CategoryMapper.mapToCategory(categoryDto);
         Category savedCategory = categoryRepository.save(category);
         return CategoryMapper.mapToCategoryDto(savedCategory);
+    }
+
+    @Override
+    public CategoryDto getCategoryById(Long categoryId) {
+       Category category =  categoryRepository.findById(categoryId)
+                .orElseThrow(() ->
+                        new ResourceNotFoundException("Category doesn't exist"));
+        return CategoryMapper.mapToCategoryDto(category);
     }
 }
