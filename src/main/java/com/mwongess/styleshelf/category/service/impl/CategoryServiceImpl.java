@@ -9,6 +9,10 @@ import com.mwongess.styleshelf.category.service.CategoryService;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
+
 @Service
 @AllArgsConstructor
 public class CategoryServiceImpl implements CategoryService {
@@ -27,5 +31,12 @@ public class CategoryServiceImpl implements CategoryService {
                 .orElseThrow(() ->
                         new ResourceNotFoundException("Category doesn't exist"));
         return CategoryMapper.mapToCategoryDto(category);
+    }
+
+    @Override
+    public List<CategoryDto> getAllCategories() {
+        List<Category> categories = categoryRepository.findAll();
+        return categories.stream().map(CategoryMapper::mapToCategoryDto)
+                .collect(Collectors.toList());
     }
 }
